@@ -2,8 +2,6 @@
 
 In diesem Repository wird der Code unserer App sein, die wir im Laufe des Moduls entwickeln werden.
 
-2025-08-18: HALLO TEST HALLO.......... TEST 2 TEST 2 AAAAAAAAAAA
-
 # Arbeitsauftrag 1
 ## 5. Dokumentation & Reflexion
 //TODO
