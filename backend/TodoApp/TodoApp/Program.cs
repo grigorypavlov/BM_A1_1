@@ -9,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
 builder.Services.AddSingleton<TodoService>();
+builder.Services.AddCors(options =>
+{
+    // DO NOT USE THIS IN PRODUCTION - FOR DEMO PURPOSES ONLY
+    options.AddPolicy("AllowAny",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 
 var app = builder.Build();
 
@@ -18,7 +27,17 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowAny");
+
+// Log all requests and responses to the console
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
+    await next.Invoke();
+    Console.WriteLine($"Response: {context.Response.StatusCode} {context.Request.Path}");
+});
+
+// app.UseHttpsRedirection();
 
 app.SetupMinimalApi();
 
