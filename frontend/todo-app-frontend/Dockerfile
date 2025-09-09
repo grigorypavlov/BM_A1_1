@@ -3,19 +3,19 @@
 FROM node:22-slim AS base
 
 ARG PORT=3000
-
 ENV NEXT_TELEMETRY_DISABLED=1
-
 WORKDIR /app
 
 # Dependencies
 FROM base AS dependencies
-
 COPY package.json package-lock.json ./
 RUN npm i -g npm@11.5.2 && npm ci
 
 # Build
 FROM base AS build
+# Add the build argument for API URL
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
@@ -28,7 +28,6 @@ RUN npm i -g npm@11.5.2 && npm run build
 
 # Run
 FROM base AS run
-
 ENV NODE_ENV=production
 ENV PORT=$PORT
 
@@ -42,8 +41,6 @@ COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
-
 EXPOSE $PORT
-
 ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
