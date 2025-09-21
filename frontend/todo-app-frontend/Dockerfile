@@ -43,9 +43,13 @@ COPY --from=build /app/public ./public
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Kopiere das Start-Skript
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 USER nextjs
 
 EXPOSE $PORT
 
-ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+# Verwende das Start-Skript als Entrypoint
+CMD ["/app/start.sh"]

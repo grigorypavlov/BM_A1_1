@@ -16,7 +16,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
-  location = "Switzerland North"
+  location = "Sweden Central"
   tags = {
     Environment = "Terraform Getting Started"
     Team        = "DevOps"
@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_virtual_network" "vnet" {
   name                = "myTFVnet"
   address_space       = ["10.0.0.0/16"]
-  location            = "Switzerland North"
+  location            = "Sweden Central"
   resource_group_name = azurerm_resource_group.rg.name
 }
 
@@ -78,6 +78,10 @@ resource "azurerm_linux_web_app" "webapp1" {
       }
     }
   }
+
+  app_settings = {
+    TODOAPP_AllowedOrigin = "https://${var.webapp2_name}.azurewebsites.net"
+  }
 }
 
 
@@ -97,6 +101,6 @@ resource "azurerm_linux_web_app" "webapp2" {
   }
 
   app_settings = {
-    NEXT_PUBLIC_API_BASE_URL = "https://${azurerm_linux_web_app.webapp1.default_hostname}"
+    NEXT_PUBLIC_API_BASE_URL = "https://${var.webapp1_name}.azurewebsites.net"
   }
 }
