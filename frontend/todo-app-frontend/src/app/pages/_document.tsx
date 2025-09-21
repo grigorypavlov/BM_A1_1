@@ -7,7 +7,9 @@ export default function Document() {
             <body>
             <Main />
             <NextScript />
-            <script src="/runtime-config.js" />
+            <script src="/runtime-config.js"
+            async
+            />
             </body>
         </Html>
     );
