@@ -1,16 +1,6 @@
-export const getBaseUrl = (): string => {
-  // Im Browser
-  if (typeof window !== 'undefined') {
-    return window.__env__?.NEXT_PUBLIC_API_BASE_URL ||
-        process.env.NEXT_PUBLIC_API_BASE_URL ||
-        "http://localhost:8080";
-  }
+// Simple fetch wrapper for API requests
+const BASE_URL = process.env.BACKEND_URL || "http://localhost:8080";
 
-  // Auf dem Server
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
-};
-
-const BASE_URL = getBaseUrl();
 export async function request<T>(
   endpoint: string,
   options?: RequestInit
